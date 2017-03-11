@@ -30,6 +30,11 @@ Object.keys(db).forEach(function(modelName) {
   }
 });
 
+// Associations
+
+db.Question.hasMany(db.Choice);
+db.Choice.belongsTo(db.Question);
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
