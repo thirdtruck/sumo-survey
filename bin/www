@@ -56,6 +56,21 @@ models.sequelize.sync().then(function() {
     });
   })
   .then(function() {
+    return models.Question.create({
+      title: "Yet another example question"
+    });
+  })
+  .then(function(question) {
+    return question.createChoice({
+      text: "An example choice"
+    })
+    .then(function() {
+      return question.createChoice({
+        text: "Another example choice"
+      });
+    });
+  })
+  .then(function() {
     server.listen(port);
     server.on('error', onError);
     server.on('listening', onListening);
