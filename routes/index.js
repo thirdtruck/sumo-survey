@@ -26,10 +26,20 @@ router.get('/', function(req, res, next) {
     })
   })
   .then(function(question) {
+    var choices = question.Choices;
+
+    // TODO: Sort in query instead of here
+    choices.sort(function(a, b) {
+      return a.id - b.id;
+    });
+
     return {
       title: question.title,
-      choices: question.Choices.map(function(choice) {
-        return { text: choice.text };
+      choices: choices.map(function(choice) {
+        return {
+          id: choice.id,
+          text: choice.text
+        };
       })
     };
   })
