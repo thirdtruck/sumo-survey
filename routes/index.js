@@ -11,10 +11,6 @@ router.get('/', function(req, res, next) {
   .then(function(question) {
     return {
       title: question.title,
-      seq: [
-        { test: 'one' },
-        { test: 'two' }
-      ],
       choices: question.Choices.map(function(choice) {
         return { text: choice.text };
       })
