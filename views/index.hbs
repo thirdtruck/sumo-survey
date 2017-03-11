@@ -2,8 +2,9 @@
     <div class="col-md-12">
         <h3>Survey Question</h3>
         <p>{{question.title}}</p>
-        <a class="btn btn-primary" href="#">Yes</a>
-        <a class="btn btn-primary" href="#">No</a>
+        {{#each question.choices}}
+          <a class="btn btn-primary" href="#">{{text}}</a>
+        {{/each}}
     </div>
 </div>
 <!-- /.row -->

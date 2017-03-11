@@ -4,25 +4,26 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  models.Question.create({
-    title: "A Question"
+  models.Question.findAll({
+    include: [{ model: models.Choice }]
   })
-  .then(
-    function(question) {
-      models.Question.findAll()
-      .then(function(questions) {
-        res.render('index', {
-          question: { title: question.get('title') }
-        });
-      })
-    },
-    function(error) {
-      res.render('error', {
-        error: error,
-        message: "Unable to create Question."
-      })
-    }
-  )
+  .then(function(questions) {
+    var qs = questions.map(function(question) {
+      return {
+        title: question.title,
+        seq: [
+          { test: 'one' },
+          { test: 'two' }
+        ],
+        choices: question.Choices.map(function(choice) {
+          return { text: choice.text };
+        })
+      };
+    });
+    res.render('index', {
+      question: qs[qs.length - 1]
+    });
+  });
 });
 
 module.exports = router;
