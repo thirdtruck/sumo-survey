@@ -34,6 +34,8 @@ router.get('/', function(req, res, next) {
     });
 
     return {
+      // TODO: In a real world app, I would use and expose UUIDs instead of DB row IDs
+      id: question.id,
       title: question.title,
       choices: choices.map(function(choice) {
         return {
