@@ -3,7 +3,7 @@
         <h3>Survey Question</h3>
         <p>{{question.title}}</p>
         {{#each question.choices}}
-          <a class="btn btn-primary" href="#">{{text}}</a>
+          <a data-choice-id="{{id}}" class="btn btn-primary" href="#">{{text}}</a>
         {{/each}}
     </div>
 </div>
