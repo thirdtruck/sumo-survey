@@ -4,6 +4,7 @@
   "description": "Code exercise for Sumo",
   "main": "index.js",
   "dependencies": {
+    "express": "4.15.2",
     "mysql": "2.13.0",
     "sequelize": "3.30.2"
   },
