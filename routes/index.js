@@ -4,24 +4,25 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  models.Question.findAll({
-    include: [{ model: models.Choice }]
+  models.Question.find({
+    include: [{ model: models.Choice }],
+    order: [ models.sequelize.fn('RANDOM') ]
   })
-  .then(function(questions) {
-    var qs = questions.map(function(question) {
-      return {
-        title: question.title,
-        seq: [
-          { test: 'one' },
-          { test: 'two' }
-        ],
-        choices: question.Choices.map(function(choice) {
-          return { text: choice.text };
-        })
-      };
-    });
+  .then(function(question) {
+    return {
+      title: question.title,
+      seq: [
+        { test: 'one' },
+        { test: 'two' }
+      ],
+      choices: question.Choices.map(function(choice) {
+        return { text: choice.text };
+      })
+    };
+  })
+  .then(function(question) {
     res.render('index', {
-      question: qs[qs.length - 1]
+      question: question
     });
   });
 });
