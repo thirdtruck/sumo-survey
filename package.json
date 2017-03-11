@@ -1,0 +1,20 @@
+{
+  "name": "sumo-exercise",
+  "version": "0.0.1",
+  "description": "Code exercise for Sumo",
+  "main": "index.js",
+  "dependencies": {
+    "mysql": "2.13.0",
+    "sequelize": "3.30.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/thirdtruck/sumo-exercise"
+  },
+  "author": "J. C. Holder",
+  "license": "UNLICENSED"
+}
