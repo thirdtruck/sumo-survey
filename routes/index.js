@@ -22,11 +22,28 @@ router.get('/', function(req, res, next) {
     req.session.uuid = guest.sessionId;
 
     return models.Question.find({
-      include: [{ model: models.Choice }],
+      include: [
+        {
+          model: models.Choice,
+          include: {
+            model: models.Response,
+            required: true,
+            where: {
+              GuestId: guest.id
+            }
+          }
+        }
+      ],
       order: [ [ models.sequelize.fn('RANDOM') ] ]
     })
   })
   .then(function(question) {
+    if (! question) {
+      return {
+        title: "No questions found"
+      }
+    }
+
     var choices = question.Choices;
 
     // TODO: Sort in query instead of here
