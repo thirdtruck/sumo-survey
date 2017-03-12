@@ -36,11 +36,13 @@ db.Question.hasMany(db.Choice);
 db.Question.hasMany(db.Response)
 
 db.Choice.belongsTo(db.Question);
+db.Choice.hasMany(db.Response);
 
 db.Guest.hasMany(db.Response);
 
 db.Response.belongsTo(db.Guest);
 db.Response.belongsTo(db.Question);
+db.Response.belongsTo(db.Choice);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
