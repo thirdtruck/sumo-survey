@@ -21,12 +21,25 @@ router.get('/', function(req, res, next) {
   .then(function(guest) {
     req.session.uuid = guest.sessionId;
 
-    return models.Question.find({
-      include: [{ model: models.Choice }],
-      order: [ [ models.sequelize.fn('RANDOM') ] ]
-    })
+    return models.Question.findOne({
+      include: [ { model: models.Choice } ],
+      // Sequelize apparently doesn't support constructed subqueries yet or else we'd use one here
+      // http://stackoverflow.com/questions/36164694/sequelize-subquery-in-where-clause
+      where: {
+        id: {
+          $notIn: models.sequelize.literal('(SELECT QuestionId from Responses Where GuestId = ' + guest.id + ')')
+        }
+      }
+    });
   })
   .then(function(question) {
+
+    if (! question) {
+      return {
+        title: "No unanswered questions found"
+      }
+    }
+
     var choices = question.Choices;
 
     // TODO: Sort in query instead of here
