@@ -3,9 +3,14 @@
         <div id="question" data-question-id="{{question.id}}">
             <h3>Survey Question</h3>
             <p>{{question.title}}</p>
-            {{#each question.choices}}
-                <a data-choice-id="{{id}}" class="choice btn btn-primary" href="#">{{text}}</a>
-            {{/each}}
+            <div id="choices">
+                {{#each question.choices}}
+                    <a data-choice-id="{{id}}" class="choice btn btn-primary" href="#">{{text}}</a>
+                {{/each}}
+            </div>
+        </div>
+        <div id="answer-another" class="hidden">
+          <a href="/">Answer another question.</a>
         </div>
     </div>
 </div>
