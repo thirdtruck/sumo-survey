@@ -3,23 +3,24 @@ var models = require('../models');
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  var promise;
-
-  if (req.session.uuid) {
-    promise = models.Guest.find({
-      where: { sessionId: req.session.uuid }
+function getOrCreateGuest(sessionUUID) {
+  if (sessionUUID) {
+    return models.Guest.find({
+      where: { sessionId: sessionUUID }
     })
   } else {
-    req.session.uuid = uuidV4();
-
-    promise = models.Guest.create({
-      sessionId: req.session.uuid
+    return models.Guest.create({
+      sessionId: uuidV4()
     });
   }
+}
 
-  promise.then(function(guest) {
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  getOrCreateGuest(req.session.uuid)
+  .then(function(guest) {
+    req.session.uuid = guest.sessionId;
+
     return models.Question.find({
       include: [{ model: models.Choice }],
       order: [ [ models.sequelize.fn('RANDOM') ] ]
