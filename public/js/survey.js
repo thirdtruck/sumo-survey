@@ -21,4 +21,33 @@ $(document).ready(function() {
       );
     });
   });
+
+  var $addQuestionForm = $('#add-question-form');
+  var $questionTitle = $('#question-title');
+  var $addChoice = $('#add-choice');
+  var $addQuestion = $('#add-question');
+  var $submitting = $('#submitting');
+  var $addAnother = $('#add-another');
+
+  $addQuestion.click(function() {
+    var questionTitle = $questionTitle.val()
+
+    var choices = $addQuestionForm.find('.choice').map(function() {
+      return $(this).val();
+    }).get();
+
+    $addQuestionForm.remove();
+    $submitting.show();
+
+    $.post('/admin/add-question',
+      {
+        questionTitle: questionTitle,
+        choices: choices
+      },
+      function(data) {
+        $submitting.hide();
+        $addAnother.show();
+      }
+    );
+  });
 });

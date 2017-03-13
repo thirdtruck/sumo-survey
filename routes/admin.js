@@ -12,6 +12,10 @@ router.get('/add-question', basicAuthentication, function(req, res, next) {
   res.render('admin-add-question');
 });
 
+router.post('/add-question', basicAuthentication, function(req, res, next) {
+  res.render('admin-add-question');
+});
+
 router.get('/stats', basicAuthentication, function(req, res, next) {
   models.Question.findAll({
     include: [

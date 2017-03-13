@@ -1,7 +1,12 @@
 <div class="row">
     <div class="col-md-12">
         <h2>Add a Survey Question</h2>
-        <table>
+
+        <div id="submitting" class="hidden">Submitting question ...</div>
+
+        <div id="add-another" class="hidden"><a href="/admin/add-question">Add another</a></div>
+
+        <table id="add-question-form">
           <tr>
             <td align="right">
               <label>Question Title:</label>
@@ -10,12 +15,12 @@
               <input id="question-title" type="text"/>
             </td>
           </tr>
-          <tr class="choice">
+          <tr>
             <td align="right">
               <label>Choice:</label>
             </td>
             <td>
-              <input name="choice-1" type="text"/>
+              <input class="choice" type="text"/>
             </td>
           </tr>
           <tr>
