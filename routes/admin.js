@@ -13,9 +13,16 @@ router.get('/add-question', basicAuthentication, function(req, res, next) {
 });
 
 router.post('/add-question', basicAuthentication, function(req, res, next) {
+  var questionTitle = req.body.questionTitle;
+  var choices = req.body['choices[]'];
+
+  if (typeof(choices) == 'string') { // Occurs when only one choice is submitted
+    choices = [choices];
+  }
+
   models.Question.create({
-    title: req.body.questionTitle,
-    Choices: req.body['choices[]'].map(function(text) { return { text: text } })
+    title: questionTitle,
+    Choices: choices.map(function(text) { return { text: text } })
   }, {
     include: models.Choice
   })

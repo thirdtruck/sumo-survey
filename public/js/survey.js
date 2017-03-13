@@ -36,7 +36,19 @@ $(document).ready(function() {
 
     var choices = $addQuestionForm.find('.choice').map(function() {
       return $(this).val();
-    }).get();
+    })
+    .get()
+    .filter(function(choice) { return choice != ''; });
+
+    if (questionTitle == '') {
+      alert('Question title required.');
+      return;
+    }
+
+    if (choices.length == 0) {
+      alert('At least one choice must not be blank.');
+      return;
+    }
 
     $addQuestionForm.remove();
     $submitting.show();
