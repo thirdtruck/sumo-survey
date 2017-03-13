@@ -28,6 +28,7 @@ $(document).ready(function() {
   var $addQuestion = $('#add-question');
   var $submitting = $('#submitting');
   var $addAnother = $('#add-another');
+  var $choiceRows = $('#choice-rows');
   var choiceTemplate = $('#choice-template').html();
 
   $addQuestion.click(function() {
@@ -43,7 +44,7 @@ $(document).ready(function() {
     $.post('/admin/add-question',
       {
         questionTitle: questionTitle,
-        choices: choices
+        'choices[]': choices
       },
       function(data) {
         $submitting.hide();
@@ -53,6 +54,6 @@ $(document).ready(function() {
   });
 
   $addChoice.click(function() {
-    $('.choice-row:last').after(choiceTemplate);
+    $choiceRows.append(choiceTemplate);
   });
 });

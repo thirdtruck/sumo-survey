@@ -13,7 +13,22 @@ router.get('/add-question', basicAuthentication, function(req, res, next) {
 });
 
 router.post('/add-question', basicAuthentication, function(req, res, next) {
-  res.render('admin-add-question');
+  console.log(req.body);
+  console.log(req.body['choices[]']);
+  models.Question.create({
+    title: req.body.questionTitle,
+    Choices: req.body['choices[]'].map(function(text) { return { text: text } })
+  }, {
+    include: models.Choice
+  })
+  .then(function() {
+    res.render('admin-add-question');
+  })
+  .catch(function(error) {
+    res.render('error', {
+      error: error
+    });
+  });
 });
 
 router.get('/stats', basicAuthentication, function(req, res, next) {
