@@ -29,7 +29,10 @@ router.get('/', function(req, res, next) {
         id: {
           $notIn: models.sequelize.literal('(SELECT QuestionId from Responses Where GuestId = ' + guest.id + ')')
         }
-      }
+      },
+      order: [
+        [ models.sequelize.fn('RANDOM') ]
+      ]
     });
   })
   .then(function(question) {
