@@ -13,8 +13,6 @@ router.get('/add-question', basicAuthentication, function(req, res, next) {
 });
 
 router.post('/add-question', basicAuthentication, function(req, res, next) {
-  console.log(req.body);
-  console.log(req.body['choices[]']);
   models.Question.create({
     title: req.body.questionTitle,
     Choices: req.body['choices[]'].map(function(text) { return { text: text } })
@@ -41,7 +39,6 @@ router.get('/stats', basicAuthentication, function(req, res, next) {
   .then(function(questions) {
     var by_question = questions.map(function(question) {
       var choices = question.Choices.map(function(choice) {
-        console.log(choice.Responses);
         return {
           id: choice.id,
           text: choice.text,
