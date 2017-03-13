@@ -4,6 +4,7 @@
   "description": "Code exercise for Sumo",
   "main": "index.js",
   "dependencies": {
+    "basic-auth": "1.1.0",
     "body-parser": "1.16.0",
     "cookie-parser": "1.4.3",
     "cookie-session": "2.0.0-beta.1",
