@@ -28,6 +28,7 @@ $(document).ready(function() {
   var $addQuestion = $('#add-question');
   var $submitting = $('#submitting');
   var $addAnother = $('#add-another');
+  var choiceTemplate = $('#choice-template').html();
 
   $addQuestion.click(function() {
     var questionTitle = $questionTitle.val()
@@ -49,5 +50,9 @@ $(document).ready(function() {
         $addAnother.show();
       }
     );
+  });
+
+  $addChoice.click(function() {
+    $('.choice-row:last').after(choiceTemplate);
   });
 });

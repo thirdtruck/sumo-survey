@@ -15,7 +15,7 @@
               <input id="question-title" type="text"/>
             </td>
           </tr>
-          <tr>
+          <tr class="choice-row">
             <td align="right">
               <label>Choice:</label>
             </td>
@@ -40,6 +40,17 @@
             </td>
           </tr>
         </table>
+
+        <script id="choice-template" type="text/template">
+          <tr>
+            <td align="right">
+              <label>Choice:</label>
+            </td>
+            <td>
+              <input class="choice" type="text"/>
+            </td>
+          </tr>
+        </script>
     </div>
 </div>
 <!-- /.row -->
