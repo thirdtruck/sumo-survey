@@ -1,6 +1,25 @@
 <div class="row">
     <div class="col-md-12">
         <h2>Survey Results</h2>
+        <hr/>
+        <table>
+          <tr>
+            <th>Choice</th>
+            <th>Times Chosen</th>
+          </tr>
+          {{#each by_question}}
+            <tr>
+              <th colspan="2">Question: <i>{{title}}</i></th>
+            </tr>
+            {{#each choices}}
+            <tr>
+              <td>{{text}}</td>
+              <td align="right">{{count}}</td>
+            </tr>
+            {{/each}}
+          {{/each}}
+        </table>
+        <hr/>
     </div>
 </div>
 <!-- /.row -->
