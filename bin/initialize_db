@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+
+var models = require('../models');
+
+/* Initialize the database with sample data. */
+
+models.sequelize.sync().then(function() {
+  models.Question.create({
+    title: "An example question"
+  })
+  .then(function(question) {
+    return question.createChoice({
+      text: "An example choice"
+    })
+    .then(function() {
+      return question.createChoice({
+        text: "Another example choice"
+      });
+    });
+  })
+  .then(function() {
+    return models.Question.create({
+      title: "Another example question"
+    });
+  })
+  .then(function(question) {
+    return question.createChoice({
+      text: "An example choice"
+    })
+    .then(function() {
+      return question.createChoice({
+        text: "Another example choice"
+      });
+    });
+  })
+  .then(function() {
+    return models.Question.create({
+      title: "Yet another example question"
+    });
+  })
+  .then(function(question) {
+    return question.createChoice({
+      text: "An example choice"
+    })
+    .then(function() {
+      return question.createChoice({
+        text: "Another example choice"
+      });
+    });
+  })
+  .then(function() {
+    console.log('Database initialized.');
+  });
+});
