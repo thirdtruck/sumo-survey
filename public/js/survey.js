@@ -1,3 +1,5 @@
+/* eslint-env browser, jquery */
+
 $(document).ready(function() {
   var $question = $('#question');
   var $choices = $('#choices');
