@@ -5,6 +5,10 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 
+const configDatabase = process.env.SURVEY_DATABASE || config.database;
+const configUsername = process.env.SURVEY_USERNAME || config.username;
+const configPassword = process.env.SURVEY_PASSWORD || config.password;
+
 let sequelize;
 
 const basename = path.basename(module.filename);
@@ -13,7 +17,7 @@ const db = {};
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(configDatabase, configUsername, configPassword, config);
 }
 
 function onlyJSFiles(file) {
