@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      question_id: {
+      QuestionId: {
         type: Sequelize.UUID
       },
       text: {

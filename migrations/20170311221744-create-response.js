@@ -11,6 +11,12 @@ module.exports = {
       GuestId: {
         type: Sequelize.UUID
       },
+      QuestionId: {
+        type: Sequelize.UUID
+      },
+      ChoiceId: {
+        type: Sequelize.UUID
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
