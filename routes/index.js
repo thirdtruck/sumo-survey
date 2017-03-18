@@ -31,7 +31,7 @@ router.get('/', function(req, res, next) {
         }
       },
       order: [
-        [ models.sequelize.fn('RANDOM') ]
+        [ models.sequelize.fn('RAND') ]
       ]
     });
   })
