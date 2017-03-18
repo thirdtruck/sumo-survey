@@ -1,23 +1,11 @@
 {
   "development": {
-    "username": "sumo",
-    "password": "sumopass",
-    "database": "sumo",
-    "host": "localhost",
-    "dialect": "mysql"
+    "use_env_variable": "CLEARDB_DATABASE_URL"
   },
   "test": {
-    "username": "sumo",
-    "password": "sumopass",
-    "database": "sumo",
-    "host": "localhost",
-    "dialect": "mysql"
+    "use_env_variable": "CLEARDB_DATABASE_URL"
   },
   "production": {
-    "username": "sumo",
-    "password": "sumopass",
-    "database": "sumo",
-    "host": "localhost",
-    "dialect": "mysql"
+    "use_env_variable": "CLEARDB_DATABASE_URL"
   }
 }
