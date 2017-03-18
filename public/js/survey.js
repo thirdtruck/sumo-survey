@@ -1,53 +1,62 @@
 /* eslint-env browser, jquery */
 
-$(document).ready(function() {
-  var $question = $('#question');
-  var $choices = $('#choices');
-  var $answerAnother = $('#answer-another');
+function onDocumentReady() {
+  const $question = $('#question');
+  const $choices = $('#choices');
+  const $answerAnother = $('#answer-another');
 
-  $question.find('.choice').each(function(index, choice) {
-    var $choice = $(choice);
+  function addPostCallbackOnClick(index, choice) {
+    const $choice = $(choice);
 
-    $choice.click(function() {
-      $choices.replaceWith("Submitting ...");
+    function onClick() {
+      $choices.replaceWith('Submitting ...');
 
-      $.post('/response',
-        {
-          questionId: $question.data('question-id'),
-          choiceId: $choice.data('choice-id')
-        },
-        function(data) {
-          $question.replaceWith('Answer submitted.');
-          $answerAnother.show();
-        }
-      );
-    });
-  });
+      function onResponse() {
+        $question.replaceWith('Answer submitted.');
+        $answerAnother.show();
+      }
 
-  var $addQuestionForm = $('#add-question-form');
-  var $questionTitle = $('#question-title');
-  var $addChoice = $('#add-choice');
-  var $addQuestion = $('#add-question');
-  var $submitting = $('#submitting');
-  var $addAnother = $('#add-another');
-  var $choiceRows = $('#choice-rows');
-  var choiceTemplate = $('#choice-template').html();
+      const responseData = {
+        questionId: $question.data('question-id'),
+        choiceId: $choice.data('choice-id'),
+      };
 
-  $addQuestion.click(function() {
-    var questionTitle = $questionTitle.val()
+      $.post('/response', responseData, onResponse);
+    }
 
-    var choices = $addQuestionForm.find('.choice').map(function() {
+    $choice.click(onClick);
+  }
+
+  $question.find('.choice').each(addPostCallbackOnClick);
+
+  const $addQuestionForm = $('#add-question-form');
+  const $questionTitle = $('#question-title');
+  const $addChoice = $('#add-choice');
+  const $addQuestion = $('#add-question');
+  const $submitting = $('#submitting');
+  const $addAnother = $('#add-another');
+  const $choiceRows = $('#choice-rows');
+  const choiceTemplate = $('#choice-template').html();
+
+  function onClickAddQuestion() {
+    const questionTitle = $questionTitle.val();
+
+    function getValue() {
       return $(this).val();
-    })
-    .get()
-    .filter(function(choice) { return choice != ''; });
+    }
 
-    if (questionTitle == '') {
+    function rejectBlankChoices(choice) { return choice !== ''; }
+
+    const choices = $addQuestionForm.find('.choice').map(getValue)
+    .get()
+    .filter(rejectBlankChoices);
+
+    if (questionTitle === '') {
       alert('Question title required.');
       return;
     }
 
-    if (choices.length == 0) {
+    if (choices.length === 0) {
       alert('At least one choice must not be blank.');
       return;
     }
@@ -55,19 +64,23 @@ $(document).ready(function() {
     $addQuestionForm.remove();
     $submitting.show();
 
-    $.post('/admin/add-question',
-      {
-        questionTitle: questionTitle,
-        'choices[]': choices
-      },
-      function(data) {
-        $submitting.hide();
-        $addAnother.show();
-      }
-    );
-  });
+    const questionData = { questionTitle, 'choices[]': choices };
 
-  $addChoice.click(function() {
+    function onResponse() {
+      $submitting.hide();
+      $addAnother.show();
+    }
+
+    $.post('/admin/add-question', questionData, onResponse);
+  }
+
+  $addQuestion.click(onClickAddQuestion);
+
+  function onClickAddChoice() {
     $choiceRows.append(choiceTemplate);
-  });
-});
+  }
+
+  $addChoice.click(onClickAddChoice);
+}
+
+$(document).ready(onDocumentReady);
