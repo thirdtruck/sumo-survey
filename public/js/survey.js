@@ -1,3 +1,5 @@
+/* eslint-env browser, jquery */
+
 $(document).ready(function() {
   var $question = $('#question');
   var $choices = $('#choices');
@@ -7,14 +9,14 @@ $(document).ready(function() {
     var $choice = $(choice);
 
     $choice.click(function() {
-      $choices.replaceWith("Submitting ...");
+      $choices.replaceWith('Submitting ...');
 
       $.post('/response',
         {
           questionId: $question.data('question-id'),
           choiceId: $choice.data('choice-id')
         },
-        function(data) {
+        function() {
           $question.replaceWith('Answer submitted.');
           $answerAnother.show();
         }
@@ -32,20 +34,20 @@ $(document).ready(function() {
   var choiceTemplate = $('#choice-template').html();
 
   $addQuestion.click(function() {
-    var questionTitle = $questionTitle.val()
+    var questionTitle = $questionTitle.val();
 
     var choices = $addQuestionForm.find('.choice').map(function() {
       return $(this).val();
     })
     .get()
-    .filter(function(choice) { return choice != ''; });
+    .filter(function(choice) { return choice !== ''; });
 
-    if (questionTitle == '') {
+    if (questionTitle === '') {
       alert('Question title required.');
       return;
     }
 
-    if (choices.length == 0) {
+    if (choices.length === 0) {
       alert('At least one choice must not be blank.');
       return;
     }
@@ -58,7 +60,7 @@ $(document).ready(function() {
         questionTitle: questionTitle,
         'choices[]': choices
       },
-      function(data) {
+      function() {
         $submitting.hide();
         $addAnother.show();
       }
