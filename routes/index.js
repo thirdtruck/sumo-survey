@@ -1,86 +1,72 @@
-const uuidV4 = require('uuid/v4');
-const models = require('../models');
-const express = require('express');
-
-const router = express.Router();
+var uuidV4 = require('uuid/v4');
+var models = require('../models');
+var express = require('express');
+var router = express.Router();
 
 function getOrCreateGuest(sessionUUID) {
   if (sessionUUID) {
     return models.Guest.find({
-      where: { sessionId: sessionUUID },
+      where: { sessionId: sessionUUID }
+    })
+  } else {
+    return models.Guest.create({
+      sessionId: uuidV4()
     });
   }
-
-  return models.Guest.create({
-    sessionId: uuidV4(),
-  });
 }
 
-function sortById(a, b) {
-  return a.id - b.id;
-}
-
-function mapChoiceToJSON(choice) {
-  return {
-    id: choice.id,
-    text: choice.text,
-  };
-}
-
-function onGetIndex(req, res) {
-  const session = req.session;
-
-  function getRandomQuestionUnansweredByGuest(guest) {
-    session.uuid = guest.sessionId;
-
-    const queryString = `(SELECT QuestionId from Responses Where GuestId = ${guest.id})`;
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  getOrCreateGuest(req.session.uuid)
+  .then(function(guest) {
+    req.session.uuid = guest.sessionId;
 
     return models.Question.findOne({
-      include: [{ model: models.Choice }],
+      include: [ { model: models.Choice } ],
       // Sequelize apparently doesn't support constructed subqueries yet or else we'd use one here
       // http://stackoverflow.com/questions/36164694/sequelize-subquery-in-where-clause
       where: {
         id: {
-          // I assume we can trust guest.id to be a perfectly safe value (and no injection threat)
-          // because of the database constraints
-          $notIn: models.sequelize.literal(queryString),
-        },
+          $notIn: models.sequelize.literal('(SELECT QuestionId from Responses Where GuestId = ' + guest.id + ')')
+        }
       },
       order: [
-        [models.sequelize.fn('RAND')],
-      ],
+        [ models.sequelize.fn('RAND') ]
+      ]
     });
-  }
+  })
+  .then(function(question) {
 
-  function convertQuestionModelToJSONResponse(question) {
-    if (!question) {
-      return { title: 'No unanswered questions found' };
+    if (! question) {
+      return {
+        title: "No unanswered questions found"
+      }
     }
 
-    const choices = question.Choices;
+    var choices = question.Choices;
 
     // TODO: Sort in query instead of here
-    choices.sort(sortById);
+    choices.sort(function(a, b) {
+      return a.id - b.id;
+    });
 
     return {
       // TODO: In a real world app, I would use and expose UUIDs instead of DB row IDs
       id: question.id,
       title: question.title,
-      choices: choices.map(mapChoiceToJSON),
+      choices: choices.map(function(choice) {
+        return {
+          id: choice.id,
+          text: choice.text
+        };
+      })
     };
-  }
-
-  function renderResponse(question) {
-    res.render('index', { question });
-  }
-
-  getOrCreateGuest(req.session.uuid)
-  .then(getRandomQuestionUnansweredByGuest)
-  .then(convertQuestionModelToJSONResponse)
-  .then(renderResponse);
-}
-
-/* GET home page. */
-router.get('/', onGetIndex);
+  })
+  .then(function(question) {
+    res.render('index', {
+      question: question
+    });
+  });
+});
 
 module.exports = router;
