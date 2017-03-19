@@ -4,25 +4,25 @@ var router = express.Router();
 var basicAuthentication = require('../lib/authentication').basicAuthentication;
 
 /* GET admin page */
-router.get('/', basicAuthentication, function(req, res, next) {
+router.get('/', basicAuthentication, function(req, res) {
   res.render('admin');
 });
 
-router.get('/add-question', basicAuthentication, function(req, res, next) {
+router.get('/add-question', basicAuthentication, function(req, res) {
   res.render('admin-add-question');
 });
 
-router.post('/add-question', basicAuthentication, function(req, res, next) {
+router.post('/add-question', basicAuthentication, function(req, res) {
   var questionTitle = req.body.questionTitle;
   var choices = req.body['choices[]'];
 
-  if (typeof(choices) == 'string') { // Occurs when only one choice is submitted
+  if (typeof choices === 'string') { // Occurs when only one choice is submitted
     choices = [choices];
   }
 
   models.Question.create({
     title: questionTitle,
-    Choices: choices.map(function(text) { return { text: text } })
+    Choices: choices.map(function(text) { return { text: text }; })
   }, {
     include: models.Choice
   })
@@ -36,7 +36,7 @@ router.post('/add-question', basicAuthentication, function(req, res, next) {
   });
 });
 
-router.get('/stats', basicAuthentication, function(req, res, next) {
+router.get('/stats', basicAuthentication, function(req, res) {
   models.Question.findAll({
     include: [
       { model: models.Choice, include: models.Response }
@@ -44,7 +44,7 @@ router.get('/stats', basicAuthentication, function(req, res, next) {
     order: 'Question.id ASC'
   })
   .then(function(questions) {
-    var by_question = questions.map(function(question) {
+    var byQuestion = questions.map(function(question) {
       var choices = question.Choices.map(function(choice) {
         return {
           id: choice.id,
@@ -60,8 +60,8 @@ router.get('/stats', basicAuthentication, function(req, res, next) {
       };
     });
 
-    res.render('admin-stats', { by_question: by_question });
-  })
+    res.render('admin-stats', { by_question: byQuestion });
+  });
 });
 
 module.exports = router;
