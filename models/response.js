@@ -1,6 +1,6 @@
 function exports(sequelize, DataTypes) {
   const Response = sequelize.define('Response', {
-    GuestId: DataTypes.UUID,
+    GuestId: DataTypes.INTEGER,
   }, {
     classMethods: {
       associate(models) {
