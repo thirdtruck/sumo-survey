@@ -1,92 +1,67 @@
-const models = require('../models');
-const express = require('express');
-const basicAuthentication = require('../lib/authentication').basicAuthentication;
-
-const router = express.Router();
-
-function onGetIndex(req, res) {
-  res.render('admin');
-}
+var models = require('../models');
+var express = require('express');
+var router = express.Router();
+var basicAuthentication = require('../lib/authentication').basicAuthentication;
 
 /* GET admin page */
-router.get('/', basicAuthentication, onGetIndex);
+router.get('/', basicAuthentication, function(req, res, next) {
+  res.render('admin');
+});
 
-/* GET admin/add-question page */
-
-function onGetAddQuestion(req, res) {
+router.get('/add-question', basicAuthentication, function(req, res, next) {
   res.render('admin-add-question');
-}
+});
 
-router.get('/add-question', basicAuthentication, onGetAddQuestion);
+router.post('/add-question', basicAuthentication, function(req, res, next) {
+  var questionTitle = req.body.questionTitle;
+  var choices = req.body['choices[]'];
 
-/* POST admin/add-question page */
-
-function onPostQuestion(req, res) {
-  const questionTitle = req.body.questionTitle;
-  let choices = req.body['choices[]'];
-
-  if (typeof choices === 'string') { // Occurs when only one choice is submitted
+  if (typeof(choices) == 'string') { // Occurs when only one choice is submitted
     choices = [choices];
-  }
-
-  function mapTextToJSON(text) {
-    return { text };
-  }
-
-  function renderPage() {
-    res.render('admin-add-question');
-  }
-
-  function onError(error) {
-    res.render('error', { error });
   }
 
   models.Question.create({
     title: questionTitle,
-    Choices: choices.map(mapTextToJSON),
+    Choices: choices.map(function(text) { return { text: text } })
   }, {
-    include: models.Choice,
+    include: models.Choice
   })
-  .then(renderPage)
-  .catch(onError);
-}
+  .then(function() {
+    res.render('admin-add-question');
+  })
+  .catch(function(error) {
+    res.render('error', {
+      error: error
+    });
+  });
+});
 
-router.post('/add-question', basicAuthentication, onPostQuestion);
-
-/* GET admin/stats page */
-
-function mapChoiceStatsToJSON(choice) {
-  return {
-    id: choice.id,
-    text: choice.text,
-    count: choice.Responses.length,
-  };
-}
-
-function mapQuestionStatsToJSON(question) {
-  const choices = question.Choices.map(mapChoiceStatsToJSON);
-
-  return {
-    id: question.id,
-    title: question.title,
-    choices,
-  };
-}
-
-function getStats(req, res) {
-  function renderStats(questions) {
-    const byQuestion = questions.map(mapQuestionStatsToJSON);
-
-    res.render('admin-stats', { by_question: byQuestion });
-  }
-
+router.get('/stats', basicAuthentication, function(req, res, next) {
   models.Question.findAll({
-    include: [{ model: models.Choice, include: models.Response }],
-    order: 'Question.id ASC',
+    include: [
+      { model: models.Choice, include: models.Response }
+    ],
+    order: 'Question.id ASC'
   })
-  .then(renderStats);
-}
+  .then(function(questions) {
+    var by_question = questions.map(function(question) {
+      var choices = question.Choices.map(function(choice) {
+        return {
+          id: choice.id,
+          text: choice.text,
+          count: choice.Responses.length
+        };
+      });
 
-router.get('/stats', basicAuthentication, getStats);
+      return {
+        id: question.id,
+        title: question.title,
+        choices: choices
+      };
+    });
+
+    res.render('admin-stats', { by_question: by_question });
+  })
+});
 
 module.exports = router;
