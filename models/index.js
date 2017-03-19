@@ -11,9 +11,7 @@ const basename = path.basename(module.filename);
 const db = {};
 
 if (config.use_env_variable) {
-  console.log(`config.use_env_variable: ${config.use_env_variable}`);
-  console.log(`process.env[config.use_env_variable]: ${process.env[config.use_env_variable]}`);
-  sequelize = new Sequelize(process.env[config.use_env_variable], { logging: console.log });
+  sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
