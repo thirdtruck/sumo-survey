@@ -7,16 +7,16 @@ function getOrCreateGuest(sessionUUID) {
   if (sessionUUID) {
     return models.Guest.find({
       where: { sessionId: sessionUUID }
-    })
-  } else {
-    return models.Guest.create({
-      sessionId: uuidV4()
     });
   }
+
+  return models.Guest.create({
+    sessionId: uuidV4()
+  });
 }
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   getOrCreateGuest(req.session.uuid)
   .then(function(guest) {
     req.session.uuid = guest.sessionId;
@@ -36,11 +36,10 @@ router.get('/', function(req, res, next) {
     });
   })
   .then(function(question) {
-
-    if (! question) {
+    if (!question) {
       return {
-        title: "No unanswered questions found"
-      }
+        title: 'No unanswered questions found'
+      };
     }
 
     var choices = question.Choices;
