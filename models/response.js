@@ -1,9 +1,10 @@
-function exports(sequelize, DataTypes) {
-  const Response = sequelize.define('Response', {
+'use strict';
+module.exports = function(sequelize, DataTypes) {
+  var Response = sequelize.define('Response', {
     GuestId: DataTypes.INTEGER,
   }, {
     classMethods: {
-      associate(models) {
+      associate: function(models) {
         // associations can be defined here
 
         models.Response.belongsTo(models.Guest);
@@ -13,6 +14,4 @@ function exports(sequelize, DataTypes) {
     },
   });
   return Response;
-}
-
-module.exports = exports;
+};
