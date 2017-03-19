@@ -91,4 +91,4 @@ function onSync() {
 
 server = http.createServer(app);
 
-models.sequelize.sync().then(onSync);
+models.sequelize.sync({ logging: console.log }).then(onSync);
