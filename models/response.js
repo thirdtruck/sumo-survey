@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Response = sequelize.define('Response', {
-    GuestId: DataTypes.INTEGER,
+    GuestId: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {
@@ -10,8 +10,8 @@ module.exports = function(sequelize, DataTypes) {
         models.Response.belongsTo(models.Guest);
         models.Response.belongsTo(models.Question);
         models.Response.belongsTo(models.Choice);
-      },
-    },
+      }
+    }
   });
   return Response;
 };
