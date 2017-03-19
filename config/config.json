@@ -5,6 +5,12 @@
   "test": {
     "use_env_variable": "DATABASE_URL"
   },
+  "mysql": {
+    "use_env_variable": "CLEARDB_DATABASE_URL"
+  },
+  "postgresql": {
+    "use_env_variable": "DATABASE_URL"
+  },
   "production": {
     "use_env_variable": "DATABASE_URL"
   }
