@@ -1,17 +1,26 @@
 {
   "development": {
-    "use_env_variable": "DATABASE_URL"
+    "username": "sumo",
+    "password": "sumopass",
+    "database": "sumo",
+    "host": "localhost",
+    "dialect": "mysql"
   },
   "test": {
-    "use_env_variable": "DATABASE_URL"
-  },
-  "mysql": {
-    "use_env_variable": "CLEARDB_DATABASE_URL"
-  },
-  "postgresql": {
-    "use_env_variable": "DATABASE_URL"
+    "username": "sumo",
+    "password": "sumopass",
+    "database": "sumo",
+    "host": "localhost",
+    "dialect": "mysql"
   },
   "production": {
-    "use_env_variable": "DATABASE_URL"
+    "username": "sumo",
+    "password": "sumopass",
+    "database": "sumo",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "heroku": {
+    "use_env_variable": "CLEARDB_DATABASE_URL"
   }
 }
